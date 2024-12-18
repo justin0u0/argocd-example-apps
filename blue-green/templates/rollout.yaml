@@ -14,10 +14,22 @@ spec:
     matchLabels:
       app: {{ template "helm-guestbook.name" . }}
       release: {{ .Release.Name }}
+  analysis:
+    successfulRunHistoryLimit: 1
+    unsuccessfulRunHistoryLimit: 1
   strategy:
     blueGreen:
       activeService: {{ template "helm-guestbook.fullname" . }}
       previewService: {{ template "helm-guestbook.fullname" . }}-preview
+      autoPromotionEnabled: true
+      prePromotionAnalysis:
+        analysisRunMetadata: {}
+        templates:
+        - templateName: example-analysis
+      postPromotionAnalysis:
+        analysisRunMetadata: {}
+        templates:
+        - templateName: example-analysis
   template:
     metadata:
       labels:
@@ -25,6 +37,9 @@ spec:
         release: {{ .Release.Name }}
     spec:
       containers:
+        - name: busybox
+          image: busybox:1.28
+          command: ['sleep', '86400']
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
