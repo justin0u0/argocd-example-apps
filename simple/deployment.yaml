@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  namespace: justin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - image: nginx:latest
+        name: nginx
+        ports:
+        - containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-bitnami
+  namespace: justin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-bitnami
+  template:
+    metadata:
+      labels:
+        app: nginx-bitnami
+    spec:
+      containers:
+      - image: bitnami/nginx:latest
+        name: bitnami-nginx
+        ports:
+        - containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-docker
+  namespace: justin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-docker
+  template:
+    metadata:
+      labels:
+        app: nginx-docker
+    spec:
+      containers:
+      - image: docker.io/nginx:latest
+        name: docker-nginx
+        ports:
+        - containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-quay
+  namespace: justin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-quay
+  template:
+    metadata:
+      labels:
+        app: nginx-quay
+    spec:
+      containers:
+      - image: quay.io/nginx/nginx-unprivileged
+        name: quay-nginx
+        ports:
+        - containerPort: 80
